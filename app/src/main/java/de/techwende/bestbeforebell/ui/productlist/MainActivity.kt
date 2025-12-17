@@ -1,4 +1,4 @@
-package de.techwende.bestbeforebell.ui.main
+package de.techwende.bestbeforebell.ui.productlist
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

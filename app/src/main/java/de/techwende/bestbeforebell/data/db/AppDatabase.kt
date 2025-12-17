@@ -1,4 +1,4 @@
-package de.techwende.bestbeforebell.data.database
+package de.techwende.bestbeforebell.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
