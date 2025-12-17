@@ -13,13 +13,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.techwende.bestbeforebell.domain.model.Product
 
 @Preview
 @Composable
-fun ProductListScreen(viewModel: MainViewModel = viewModel()) {
-    val products by viewModel.products.collectAsState()
+fun ProductListScreen(viewModel: MainViewModel = hiltViewModel()) {
+    val products by viewModel.products.collectAsState(emptyList())
 
     LazyColumn {
         items(products) { product ->
