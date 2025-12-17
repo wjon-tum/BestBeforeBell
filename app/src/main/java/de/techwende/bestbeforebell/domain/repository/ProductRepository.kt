@@ -1,4 +1,4 @@
-package de.techwende.bestbeforebell.data.repository
+package de.techwende.bestbeforebell.domain.repository
 
 import de.techwende.bestbeforebell.data.dao.ProductDao
 import de.techwende.bestbeforebell.data.model.ProductEntity
