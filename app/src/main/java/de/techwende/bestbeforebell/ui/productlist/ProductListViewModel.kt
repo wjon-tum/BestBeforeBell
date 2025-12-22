@@ -46,39 +46,39 @@ class ProductListViewModel
             }
         }
 
-    private val _editingProduct = MutableStateFlow<Product?>(null)
-    val editingProduct: StateFlow<Product?> = _editingProduct
+        private val _editingProduct = MutableStateFlow<Product?>(null)
+        val editingProduct: StateFlow<Product?> = _editingProduct
 
-    fun startEditing(product: Product?) {
-        _editingProduct.value = product
-    }
+        fun startEditing(product: Product?) {
+            _editingProduct.value = product
+        }
 
-    fun saveProduct(
-        name: String,
-        bestBefore: LocalDate,
-        multiplicity: Int = 1
-    ) {
-        viewModelScope.launch {
-            val product =
-                _editingProduct.value?.copy(
-                    name = name,
-                    bestBefore = bestBefore,
-                    multiplicity = multiplicity
-                ) ?: Product(
-                    id = 0,
-                    name = name,
-                    bestBefore = bestBefore,
-                    multiplicity = multiplicity
-                )
+        fun saveProduct(
+            name: String,
+            bestBefore: LocalDate,
+            multiplicity: Int = 1
+        ) {
+            viewModelScope.launch {
+                val product =
+                    _editingProduct.value?.copy(
+                        name = name,
+                        bestBefore = bestBefore,
+                        multiplicity = multiplicity
+                    ) ?: Product(
+                        id = 0,
+                        name = name,
+                        bestBefore = bestBefore,
+                        multiplicity = multiplicity
+                    )
 
-            productService.addProduct(product.name, product.bestBefore)
+                productService.addProduct(product.name, product.bestBefore)
+                _editingProduct.value = null
+            }
+        }
+
+        fun cancelEditing() {
             _editingProduct.value = null
         }
-    }
-
-    fun cancelEditing() {
-        _editingProduct.value = null
-    }
 
         fun removeProduct(product: Product) {
             viewModelScope.launch {
