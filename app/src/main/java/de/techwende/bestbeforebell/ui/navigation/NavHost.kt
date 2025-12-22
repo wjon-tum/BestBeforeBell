@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import de.techwende.bestbeforebell.ui.modifyproduct.ProductEditorScreen
+import de.techwende.bestbeforebell.ui.editproduct.ProductEditorScreen
 import de.techwende.bestbeforebell.ui.productlist.ProductListScreen
 
 @Composable
@@ -32,7 +32,6 @@ fun AppNavHost() {
         // Add product
         composable(Screen.AddProduct.route) {
             ProductEditorScreen(
-                productId = null,
                 onFinished = {
                     navController.popBackStack()
                 }
@@ -51,7 +50,6 @@ fun AppNavHost() {
                 backStackEntry.arguments!!.getLong("productId")
 
             ProductEditorScreen(
-                productId = productId,
                 onFinished = {
                     navController.popBackStack()
                 }
