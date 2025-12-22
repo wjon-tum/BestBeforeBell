@@ -1,9 +1,10 @@
-package de.techwende.bestbeforebell.ui.productlist
+package de.techwende.bestbeforebell.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
+import de.techwende.bestbeforebell.ui.navigation.AppNavHost
 import de.techwende.bestbeforebell.ui.theme.BestBeforeBellTheme
 
 @AndroidEntryPoint
@@ -12,7 +13,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BestBeforeBellTheme {
-                ProductListScreen()
+                AppNavHost()
             }
         }
     }

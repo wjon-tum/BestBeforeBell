@@ -5,5 +5,6 @@ import java.time.LocalDate
 data class Product(
     val id: Long,
     val name: String,
-    val bestBefore: LocalDate
+    val bestBefore: LocalDate,
+    val multiplicity: Int = 1
 )

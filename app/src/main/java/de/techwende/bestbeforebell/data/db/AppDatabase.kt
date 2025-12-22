@@ -7,8 +7,8 @@ import de.techwende.bestbeforebell.data.model.ProductEntity
 
 @Database(
     entities = [ProductEntity::class],
-    version = 1,
-    exportSchema = true
+    version = 3,
+    exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao

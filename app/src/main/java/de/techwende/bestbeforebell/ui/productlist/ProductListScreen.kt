@@ -1,67 +1,133 @@
 package de.techwende.bestbeforebell.ui.productlist
 
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.DismissDirection
+import androidx.compose.material.DismissValue
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.SwipeToDismiss
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.rememberDismissState
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import de.techwende.bestbeforebell.domain.model.Product
+import java.time.LocalDate
 
-@Preview
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun ProductListScreen(viewModel: ProductListViewModel = hiltViewModel(LocalViewModelStoreOwner.current!!)) {
+fun ProductListScreen(
+    viewModel: ProductListViewModel = hiltViewModel(),
+    onEditClicked: (Product) -> Unit,
+    onAddClicked: () -> Unit
+) {
     val products by viewModel.products.collectAsState(emptyList())
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { viewModel.addDummyProduct() }
-            ) {
-                Text("+")
+            FloatingActionButton(onClick = onAddClicked) {
+                Icon(Icons.Default.Add, contentDescription = "Add Product")
             }
         }
     ) { padding ->
         LazyColumn(
-            modifier = Modifier.padding(padding)
+            contentPadding = padding,
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            items(products) { product ->
-                ProductItem(product, viewModel)
+            items(products, key = { it.id }) { product ->
+                val dismissState =
+                    rememberDismissState(
+                        confirmStateChange = {
+                            if (it == DismissValue.DismissedToStart || it == DismissValue.DismissedToEnd) {
+                                viewModel.removeProduct(product)
+                            }
+                            true
+                        }
+                    )
+
+                SwipeToDismiss(
+                    state = dismissState,
+                    directions = setOf(DismissDirection.EndToStart),
+                    background = {
+                        Box(
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .background(Color.Red)
+                                    .padding(16.dp),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            Icon(
+                                Icons.Default.Delete,
+                                contentDescription = "Delete",
+                                tint = Color.White
+                            )
+                        }
+                    }
+                ) {
+                    ProductListItem(
+                        product = product,
+                        onClick = { onEditClicked(product) }
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun ProductItem(
+fun ProductListItem(
     product: Product,
-    viewModel: ProductListViewModel
+    onClick: () -> Unit
 ) {
-    Column(
+    Card(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
-                .clickable { viewModel.removeProduct(product) }
+                .clickable(onClick = onClick)
+                .padding(horizontal = 8.dp, vertical = 4.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Text(
-            text = product.name,
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-            text = "Best before: ${product.bestBefore}",
-        )
+        Row(
+            modifier = Modifier.padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(product.name, style = MaterialTheme.typography.titleMedium)
+            Text(
+                product.bestBefore.toString(),
+                style = MaterialTheme.typography.bodyMedium,
+                color =
+                    if (product.bestBefore.isBefore(LocalDate.now())) {
+                        Color.Red
+                    } else if (product.bestBefore.isBefore(LocalDate.now().plusDays(7))) {
+                        Color.Magenta
+                    } else {
+                        Color.Unspecified
+                    }
+            )
+        }
     }
 }

@@ -24,6 +24,7 @@ class ProductRepository(
         Product(
             id = id,
             name = name,
+            multiplicity = multiplicity,
             bestBefore =
                 Instant
                     .ofEpochMilli(bestBefore)
@@ -35,6 +36,7 @@ class ProductRepository(
         ProductEntity(
             id = id,
             name = name,
+            multiplicity = multiplicity,
             bestBefore = bestBefore.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
         )
 }

@@ -24,7 +24,8 @@ object DatabaseModule {
                 context,
                 AppDatabase::class.java,
                 "expiry.db"
-            ).build()
+            ).fallbackToDestructiveMigration() // todo remove before final release
+            .build()
 
     @Provides
     fun provideProductDao(db: AppDatabase): ProductDao = db.productDao()

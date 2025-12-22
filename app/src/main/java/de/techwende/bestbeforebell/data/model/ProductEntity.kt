@@ -9,5 +9,6 @@ data class ProductEntity(
     val id: Long = 0,
     val name: String,
     // bestBefore as epoch millis
-    val bestBefore: Long
+    val bestBefore: Long,
+    val multiplicity: Int = 1
 )
