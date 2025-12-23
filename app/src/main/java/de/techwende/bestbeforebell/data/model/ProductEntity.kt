@@ -10,5 +10,5 @@ data class ProductEntity(
     val name: String,
     // bestBefore as epoch millis
     val bestBefore: Long,
-    val multiplicity: Int = 1
+    val quantity: Int = 1
 )

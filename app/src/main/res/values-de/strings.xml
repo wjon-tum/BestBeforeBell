@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BestBefore Bell</string>
+    <string name="navigation_drawer_open">Öffne Navigationsmenü</string>
+    <string name="navigation_drawer_close">Schließe Navigationsmenü</string>
+    <string name="add_product">Produkt hinzufügen</string>
+    <string name="save">Speichern</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="best_before">Mindestens haltbar bis</string>
+    <string name="product_name">Produktname</string>
+    <string name="quantity">Anzahl</string>
+    <string name="invalid_number">Ungültige Zahl!</string>
+    <string name="invalid_name">Ungültiger Name!</string>
+    <string name="search">Suche</string>
+</resources>

@@ -1,5 +1,6 @@
 package de.techwende.bestbeforebell.ui.productlist
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +18,8 @@ import javax.inject.Inject
 class ProductListViewModel
     @Inject
     constructor(
-        private val productService: ProductService
+        private val productService: ProductService,
+        savedStateHandle: SavedStateHandle
     ) : ViewModel() {
         val products: StateFlow<List<Product>> =
             productService
@@ -28,56 +30,40 @@ class ProductListViewModel
                     initialValue = emptyList()
                 )
 
-        fun addProduct(
-            name: String,
-            bestBefore: LocalDate
-        ) {
-            viewModelScope.launch {
-                productService.addProduct(name, bestBefore)
-            }
-        }
-
-        fun addDummyProduct() {
-            viewModelScope.launch {
-                productService.addProduct(
-                    name = "Milk",
-                    bestBefore = LocalDate.now().plusDays(3)
-                )
-            }
-        }
-
-        private val _editingProduct = MutableStateFlow<Product?>(null)
-        val editingProduct: StateFlow<Product?> = _editingProduct
-
-        fun startEditing(product: Product?) {
-            _editingProduct.value = product
-        }
+        private val productId: Long? = savedStateHandle["productId"]
+        val editingProduct: StateFlow<Product?> =
+            productId
+                ?.let { id ->
+                    productService
+                        .findById(id)
+                        .stateIn(
+                            viewModelScope,
+                            SharingStarted.WhileSubscribed(5_000),
+                            null
+                        )
+                }
+                ?: MutableStateFlow(null)
 
         fun saveProduct(
             name: String,
             bestBefore: LocalDate,
-            multiplicity: Int = 1
+            quantity: Int = 1
         ) {
             viewModelScope.launch {
                 val product =
-                    _editingProduct.value?.copy(
+                    editingProduct.value?.copy(
                         name = name,
                         bestBefore = bestBefore,
-                        multiplicity = multiplicity
+                        quantity = quantity
                     ) ?: Product(
                         id = 0,
                         name = name,
                         bestBefore = bestBefore,
-                        multiplicity = multiplicity
+                        quantity = quantity
                     )
 
-                productService.addProduct(product.name, product.bestBefore)
-                _editingProduct.value = null
+                productService.saveProduct(product)
             }
-        }
-
-        fun cancelEditing() {
-            _editingProduct.value = null
         }
 
         fun removeProduct(product: Product) {

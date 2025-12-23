@@ -6,5 +6,5 @@ data class Product(
     val id: Long,
     val name: String,
     val bestBefore: LocalDate,
-    val multiplicity: Int = 1
+    val quantity: Int
 )

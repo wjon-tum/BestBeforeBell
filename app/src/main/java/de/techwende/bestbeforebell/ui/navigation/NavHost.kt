@@ -1,14 +1,20 @@
 package de.techwende.bestbeforebell.ui.navigation
 
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import de.techwende.bestbeforebell.ui.modifyproduct.ProductEditorScreen
+import de.techwende.bestbeforebell.ui.editproduct.ProductEditorScreen
 import de.techwende.bestbeforebell.ui.productlist.ProductListScreen
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController()
@@ -18,11 +24,13 @@ fun AppNavHost() {
         startDestination = Screen.ProductList.route
     ) {
         // Product list
-        composable(Screen.ProductList.route) {
+        composable(
+            route = Screen.ProductList.route,
+            enterTransition = { fadeIn() },
+            exitTransition = { fadeOut() }
+        ) {
             ProductListScreen(
-                onAddClicked = {
-                    navController.navigate(Screen.AddProduct.route)
-                },
+                onAddClicked = { navController.navigate(Screen.AddProduct.route) },
                 onEditClicked = { product ->
                     navController.navigate(Screen.EditProduct.createRoute(product.id))
                 }
@@ -30,9 +38,22 @@ fun AppNavHost() {
         }
 
         // Add product
-        composable(Screen.AddProduct.route) {
+        composable(
+            route = Screen.AddProduct.route,
+            enterTransition = {
+                slideInHorizontally { it } + fadeIn()
+            },
+            exitTransition = {
+                slideOutHorizontally { it } + fadeOut()
+            },
+            popEnterTransition = {
+                slideInHorizontally { -it } + fadeIn()
+            },
+            popExitTransition = {
+                slideOutHorizontally { it } + fadeOut()
+            }
+        ) {
             ProductEditorScreen(
-                productId = null,
                 onFinished = {
                     navController.popBackStack()
                 }
@@ -42,16 +63,25 @@ fun AppNavHost() {
         // Edit product
         composable(
             route = Screen.EditProduct.route,
+            enterTransition = {
+                slideInHorizontally { it } + fadeIn()
+            },
+            exitTransition = {
+                slideOutHorizontally { it } + fadeOut()
+            },
+            popEnterTransition = {
+                slideInHorizontally { -it } + fadeIn()
+            },
+            popExitTransition = {
+                slideOutHorizontally { it } + fadeOut()
+            },
             arguments =
                 listOf(
                     navArgument("productId") { type = NavType.LongType }
                 )
         ) { backStackEntry ->
-            val productId =
-                backStackEntry.arguments!!.getLong("productId")
-
+            backStackEntry.arguments!!.getLong("productId")
             ProductEditorScreen(
-                productId = productId,
                 onFinished = {
                     navController.popBackStack()
                 }
