@@ -23,13 +23,14 @@ class ProductRepository(
 
     suspend fun removeProduct(product: Product) = dao.delete(product.toEntity())
 
-    suspend fun findByNameAndBestBefore(name: String, date: LocalDate) =
-        dao.findByNameAndDate(name.lowercase(), dateToEntity(date))?.toDomain()
+    suspend fun findByNameAndBestBefore(
+        name: String,
+        date: LocalDate
+    ) = dao.findByNameAndDate(name.lowercase(), dateToEntity(date))?.toDomain()
 
     fun findById(id: Long) = dao.findById(id).map { it?.toDomain() }
 
-    suspend fun findByName(name: String) =
-        dao.findByName(name).map { list -> list.map { it.toDomain() } }
+    suspend fun findByName(name: String) = dao.findByName(name).map { list -> list.map { it.toDomain() } }
 
     fun ProductEntity.toDomain(): Product =
         Product(
@@ -37,7 +38,6 @@ class ProductRepository(
             name = name.replaceFirstChar { c -> c.uppercase() },
             quantity = quantity,
             bestBefore = dateToDomain(bestBefore)
-
         )
 
     fun Product.toEntity(): ProductEntity =
@@ -48,15 +48,15 @@ class ProductRepository(
             bestBefore = dateToEntity(bestBefore)
         )
 
+    private fun dateToDomain(bestBefore: Long): LocalDate =
+        Instant
+            .ofEpochMilli(bestBefore)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
 
-    private fun dateToDomain(bestBefore: Long): LocalDate = Instant
-        .ofEpochMilli(bestBefore)
-        .atZone(ZoneId.systemDefault())
-        .toLocalDate()
-
-    private fun dateToEntity(bestBefore: LocalDate): Long = bestBefore
-        .atStartOfDay(ZoneId.systemDefault())
-        .toInstant()
-        .toEpochMilli()
-
+    private fun dateToEntity(bestBefore: LocalDate): Long =
+        bestBefore
+            .atStartOfDay(ZoneId.systemDefault())
+            .toInstant()
+            .toEpochMilli()
 }

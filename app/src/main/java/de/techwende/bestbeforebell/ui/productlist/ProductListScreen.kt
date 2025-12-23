@@ -57,8 +57,10 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
 
-val dateFormater: DateTimeFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
-    .withLocale(Locale.getDefault())
+val dateFormater: DateTimeFormatter =
+    DateTimeFormatter
+        .ofLocalizedDate(FormatStyle.MEDIUM)
+        .withLocale(Locale.getDefault())
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -72,12 +74,16 @@ fun ProductListScreen(
     var searchActive by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
-    val filteredProducts = remember(products, searchQuery) {
-        if (searchQuery.isBlank()) products
-        else products.filter {
-            it.name.contains(searchQuery, ignoreCase = true)
+    val filteredProducts =
+        remember(products, searchQuery) {
+            if (searchQuery.isBlank()) {
+                products
+            } else {
+                products.filter {
+                    it.name.contains(searchQuery, ignoreCase = true)
+                }
+            }
         }
-    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -117,7 +123,6 @@ fun ProductListScreen(
                 windowInsets = WindowInsets.statusBars
             )
         },
-
         floatingActionButton = {
             FloatingActionButton(onClick = onAddClicked) {
                 Icon(Icons.Default.Add, contentDescription = "Add Product")

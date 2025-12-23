@@ -31,16 +31,18 @@ class ProductListViewModel
                 )
 
         private val productId: Long? = savedStateHandle["productId"]
-    val editingProduct: StateFlow<Product?> =  productId
-            ?.let { id ->
-                productService.findById(id)
-                    .stateIn(
-                        viewModelScope,
-                        SharingStarted.WhileSubscribed(5_000),
-                        null
-                    )
-            }
-            ?: MutableStateFlow(null)
+        val editingProduct: StateFlow<Product?> =
+            productId
+                ?.let { id ->
+                    productService
+                        .findById(id)
+                        .stateIn(
+                            viewModelScope,
+                            SharingStarted.WhileSubscribed(5_000),
+                            null
+                        )
+                }
+                ?: MutableStateFlow(null)
 
         fun saveProduct(
             name: String,

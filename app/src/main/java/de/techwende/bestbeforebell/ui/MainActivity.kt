@@ -33,9 +33,10 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun AppRoot() {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(WindowInsets.safeDrawing.asPaddingValues())
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(WindowInsets.safeDrawing.asPaddingValues())
         ) {
             SystemBars()
             AppNavHost()

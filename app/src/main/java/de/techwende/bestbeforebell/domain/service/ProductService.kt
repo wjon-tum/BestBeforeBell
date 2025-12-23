@@ -29,19 +29,18 @@ class ProductService
             } else {
                 repository.addProduct(product)
             }
-
         }
 
         suspend fun removeProduct(product: Product) {
             val result = repository.findById(product.id).firstOrNull() ?: return
-            if(result.quantity > 1){
+            if (result.quantity > 1) {
                 repository.updateProduct(result.copy(quantity = result.quantity - 1))
             } else {
                 repository.removeProduct(product)
             }
         }
 
-        suspend fun removeAllOfProduct(product: Product){
+        suspend fun removeAllOfProduct(product: Product) {
             repository.removeProduct(product)
         }
     }

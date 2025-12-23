@@ -99,9 +99,10 @@ fun ProductEditorScreen(
                     Text(stringResource(R.string.invalid_number))
                 }
             },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number
-            ),
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -121,7 +122,7 @@ fun ProductEditorScreen(
                         .atZone(ZoneId.systemDefault())
                         .toLocalDate()
 
-                val quantityInt = quantity.toIntOrNull() ?: 0;
+                val quantityInt = quantity.toIntOrNull() ?: 0
                 isQuantityError = quantity.isNotEmpty() && quantityInt < 1
                 name = name.trim()
                 isNameError = name.isEmpty()
