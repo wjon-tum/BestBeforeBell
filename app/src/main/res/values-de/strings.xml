@@ -11,4 +11,5 @@
     <string name="quantity">Anzahl</string>
     <string name="invalid_number">Ungültige Zahl!</string>
     <string name="invalid_name">Ungültiger Name!</string>
+    <string name="search">Suche</string>
 </resources>

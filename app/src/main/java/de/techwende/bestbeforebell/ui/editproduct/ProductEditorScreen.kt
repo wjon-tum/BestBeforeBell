@@ -1,6 +1,5 @@
 package de.techwende.bestbeforebell.ui.editproduct
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,10 +40,13 @@ fun ProductEditorScreen(
     onFinished: () -> Unit
 ) {
     val editingProduct by viewModel.editingProduct.collectAsStateWithLifecycle()
-    Log.e("ME", "prr $editingProduct")
     var name by remember(editingProduct) { mutableStateOf(editingProduct?.name ?: "") }
     var isNameError by remember(editingProduct) { mutableStateOf(false) }
-    var quantity by remember(editingProduct) { mutableStateOf(editingProduct?.quantity?.toString() ?: "1") }
+    var quantity by remember(editingProduct) {
+        mutableStateOf(
+            editingProduct?.quantity?.toString() ?: "1"
+        )
+    }
     var isQuantityError by remember(editingProduct) { mutableStateOf(false) }
     var bestBefore by remember(editingProduct) {
         mutableStateOf(
@@ -118,7 +120,7 @@ fun ProductEditorScreen(
                         .ofEpochMilli(datePickerState.selectedDateMillis ?: 0L)
                         .atZone(ZoneId.systemDefault())
                         .toLocalDate()
-                
+
                 val quantityInt = quantity.toIntOrNull() ?: 0;
                 isQuantityError = quantity.isNotEmpty() && quantityInt < 1
                 name = name.trim()

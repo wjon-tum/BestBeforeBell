@@ -10,5 +10,6 @@
     <string name="quantity">Quantity</string>
     <string name="invalid_number">Invalid Number!</string>
     <string name="invalid_name">Invalid Name!</string>
+    <string name="search">Search</string>
 
 </resources>

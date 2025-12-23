@@ -11,35 +11,19 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProductDao {
-    @Query("SELECT * FROM products ORDER BY bestBefore ASC")
+    @Query("SELECT * FROM products ORDER BY bestBefore ASC, name ASC")
     fun getAllProducts(): Flow<List<ProductEntity>>
 
-    @Query(
-        """
-        SELECT * FROM products
-        WHERE name = :name AND bestBefore = :bestBefore
-        LIMIT 1
-    """
-    )
+    @Query("SELECT * FROM products WHERE name = :name AND bestBefore = :bestBefore LIMIT 1")
     suspend fun findByNameAndDate(
         name: String,
         bestBefore: Long
     ): ProductEntity?
 
-    @Query(
-        """
-        SELECT * FROM products
-        WHERE id = :id
-    """
-    )
+    @Query(" SELECT * FROM products WHERE id = :id")
     fun findById(id: Long): Flow<ProductEntity?>
 
-    @Query(
-        """
-        SELECT * FROM products
-        WHERE name = :name
-    """
-    )
+    @Query("SELECT * FROM products WHERE name = :name")
     fun findByName(name: String): Flow<List<ProductEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
