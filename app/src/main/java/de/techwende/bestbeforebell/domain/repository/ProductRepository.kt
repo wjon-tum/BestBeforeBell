@@ -3,11 +3,11 @@ package de.techwende.bestbeforebell.domain.repository
 import de.techwende.bestbeforebell.data.dao.ProductDao
 import de.techwende.bestbeforebell.data.model.ProductEntity
 import de.techwende.bestbeforebell.domain.model.Product
+import de.techwende.bestbeforebell.util.dateToMillis
+import de.techwende.bestbeforebell.util.millisToDate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
 
 class ProductRepository(
     private val dao: ProductDao
@@ -26,18 +26,19 @@ class ProductRepository(
     suspend fun findByNameAndBestBefore(
         name: String,
         date: LocalDate
-    ) = dao.findByNameAndDate(name.lowercase(), dateToEntity(date))?.toDomain()
+    ) = dao.findByNameAndDate(name.lowercase(), dateToMillis(date))?.toDomain()
 
     fun findById(id: Long) = dao.findById(id).map { it?.toDomain() }
 
-    suspend fun findByName(name: String) = dao.findByName(name).map { list -> list.map { it.toDomain() } }
+    suspend fun findByName(name: String) =
+        dao.findByName(name).map { list -> list.map { it.toDomain() } }
 
     fun ProductEntity.toDomain(): Product =
         Product(
             id = id,
             name = name.replaceFirstChar { c -> c.uppercase() },
             quantity = quantity,
-            bestBefore = dateToDomain(bestBefore)
+            bestBefore = millisToDate(bestBefore)
         )
 
     fun Product.toEntity(): ProductEntity =
@@ -45,18 +46,6 @@ class ProductRepository(
             id = id,
             name = name.lowercase(),
             quantity = quantity,
-            bestBefore = dateToEntity(bestBefore)
+            bestBefore = dateToMillis(bestBefore)
         )
-
-    private fun dateToDomain(bestBefore: Long): LocalDate =
-        Instant
-            .ofEpochMilli(bestBefore)
-            .atZone(ZoneId.systemDefault())
-            .toLocalDate()
-
-    private fun dateToEntity(bestBefore: LocalDate): Long =
-        bestBefore
-            .atStartOfDay(ZoneId.systemDefault())
-            .toInstant()
-            .toEpochMilli()
 }

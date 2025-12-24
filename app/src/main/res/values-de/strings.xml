@@ -12,4 +12,10 @@
     <string name="invalid_number">Ungültige Zahl!</string>
     <string name="invalid_name">Ungültiger Name!</string>
     <string name="search">Suche</string>
+    <string name="product_due">Produkt fällig</string>
+    <string name="product_overdue">Produkt überfällig!</string>
+    <string name="due_in_days">Das Produkt %1$s ist in %2$d Tagen fällig</string>
+    <string name="due_tomorrow">Das Produkt %1$s ist morgen fällig</string>
+    <string name="due_today">Das Produkt %1$s ist heute fällig</string>
+    <string name="due_for_days">Das Produkt %1$s ist seit %2$d Tagen fällig!</string>
 </resources>

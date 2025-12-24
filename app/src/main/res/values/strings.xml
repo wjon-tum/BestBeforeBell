@@ -11,5 +11,11 @@
     <string name="invalid_number">Invalid Number!</string>
     <string name="invalid_name">Invalid Name!</string>
     <string name="search">Search</string>
+    <string name="product_due">Product Due</string>
+    <string name="product_overdue">Product Overdue!</string>
+    <string name="due_in_days">Product %1$s is due in %2$d days</string>
+    <string name="due_tomorrow">Product %1$s is due tomorrow</string>
+    <string name="due_today">Product %1$s is due today</string>
+    <string name="due_for_days">Product %1$s is due for %2$d days!</string>
 
 </resources>

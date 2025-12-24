@@ -1,3 +1,0 @@
-dependabot:
-  - changed-files:
-      - any-glob-to-any-file: ["**/gradle/**", "**/build.gradle*", ".github/workflows/**"]

@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
 import de.techwende.bestbeforebell.ui.navigation.AppNavHost
+import de.techwende.bestbeforebell.ui.notification.AskNotificationPermission
 import de.techwende.bestbeforebell.ui.theme.BestBeforeBellTheme
 import de.techwende.bestbeforebell.ui.theme.SystemBars
 
@@ -32,6 +33,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun AppRoot() {
+        AskNotificationPermission()
         Box(
             modifier =
                 Modifier
