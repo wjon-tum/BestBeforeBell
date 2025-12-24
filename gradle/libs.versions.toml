@@ -22,7 +22,7 @@ materialVersion = "1.10.0"
 navigationCompose = "2.9.6"
 navigationFragmentKtx = "2.9.6"
 navigationUiKtx = "2.9.6"
-room = "2.7.1"
+room = "2.8.4"
 material3 = "1.4.0"
 workRuntimeKtx = "2.11.0"
 
