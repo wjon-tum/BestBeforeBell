@@ -30,8 +30,7 @@ class ProductRepository(
 
     fun findById(id: Long) = dao.findById(id).map { it?.toDomain() }
 
-    suspend fun findByName(name: String) =
-        dao.findByName(name).map { list -> list.map { it.toDomain() } }
+    suspend fun findByName(name: String) = dao.findByName(name).map { list -> list.map { it.toDomain() } }
 
     fun ProductEntity.toDomain(): Product =
         Product(

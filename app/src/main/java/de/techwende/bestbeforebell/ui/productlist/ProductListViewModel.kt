@@ -72,7 +72,7 @@ class ProductListViewModel
                     context = appContext,
                     productName = name,
                     bestBeforeMillis = dateToMillis(bestBefore),
-                    )
+                )
 
                 scheduleProductReminder(
                     context = appContext,

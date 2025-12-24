@@ -24,13 +24,14 @@ object NotificationConstants {
 }
 
 fun createNotificationChannel(context: Context) {
-    val channel = NotificationChannel(
-        NotificationConstants.CHANNEL_ID,
-        NotificationConstants.CHANNEL_NAME,
-        NotificationManager.IMPORTANCE_DEFAULT
-    ).apply {
-        description = "Notifications for expiring products"
-    }
+    val channel =
+        NotificationChannel(
+            NotificationConstants.CHANNEL_ID,
+            NotificationConstants.CHANNEL_NAME,
+            NotificationManager.IMPORTANCE_DEFAULT
+        ).apply {
+            description = "Notifications for expiring products"
+        }
 
     val manager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
     manager.createNotificationChannel(channel)
@@ -50,15 +51,25 @@ fun AskNotificationPermission() {
     }
 }
 
-fun showProductDue(productName: String, days: Int, bestBeforeMillis: Long, context: Context) {
-    val title = if (days >= 0) context.getString(R.string.product_due)
-    else context.getString(R.string.product_overdue)
-    val content = when {
-        days > 1 -> context.getString(R.string.due_in_days, productName, days)
-        days == 1 -> context.getString(R.string.due_tomorrow, productName)
-        days == 0 -> context.getString(R.string.due_today, productName)
-        else -> context.getString(R.string.due_for_days, productName, days)
-    }
+fun showProductDue(
+    productName: String,
+    days: Int,
+    bestBeforeMillis: Long,
+    context: Context
+) {
+    val title =
+        if (days >= 0) {
+            context.getString(R.string.product_due)
+        } else {
+            context.getString(R.string.product_overdue)
+        }
+    val content =
+        when {
+            days > 1 -> context.getString(R.string.due_in_days, productName, days)
+            days == 1 -> context.getString(R.string.due_tomorrow, productName)
+            days == 0 -> context.getString(R.string.due_today, productName)
+            else -> context.getString(R.string.due_for_days, productName, days)
+        }
 
     if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
         == PackageManager.PERMISSION_DENIED
@@ -67,32 +78,44 @@ fun showProductDue(productName: String, days: Int, bestBeforeMillis: Long, conte
         return
     }
 
-    showNotification(title, content, getNotificationId(productName, bestBeforeMillis) , context)
+    showNotification(title, content, getNotificationId(productName, bestBeforeMillis), context)
 }
 
 @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-private fun showNotification(title: String, content: String, id: Int, context: Context) {
-    val notification = NotificationCompat.Builder(
-        context,
-        NotificationConstants.CHANNEL_ID
-    )
-        .setSmallIcon(R.drawable.ic_launcher_foreground) // REQUIRED
-        .setContentTitle(title)
-        .setContentText(content)
-        .setAutoCancel(true)
-        .build()
+private fun showNotification(
+    title: String,
+    content: String,
+    id: Int,
+    context: Context
+) {
+    val notification =
+        NotificationCompat
+            .Builder(
+                context,
+                NotificationConstants.CHANNEL_ID
+            ).setSmallIcon(R.drawable.ic_launcher_foreground) // REQUIRED
+            .setContentTitle(title)
+            .setContentText(content)
+            .setAutoCancel(true)
+            .build()
 
-    NotificationManagerCompat.from(context)
+    NotificationManagerCompat
+        .from(context)
         .notify(id, notification)
 }
 
-fun cancelNotification(context: Context, productName: String, bestBeforeMillis: Long) {
+fun cancelNotification(
+    context: Context,
+    productName: String,
+    bestBeforeMillis: Long
+) {
     val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     notificationManager.cancel(getNotificationId(productName, bestBeforeMillis))
 }
 
-fun getNotificationId(productName: String, bestBeforeMillis: Long): Int {
-    return (productName + bestBeforeMillis).hashCode()
-}
+fun getNotificationId(
+    productName: String,
+    bestBeforeMillis: Long
+): Int = (productName + bestBeforeMillis).hashCode()
