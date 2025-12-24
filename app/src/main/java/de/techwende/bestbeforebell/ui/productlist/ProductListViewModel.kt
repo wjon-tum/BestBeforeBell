@@ -1,11 +1,16 @@
 package de.techwende.bestbeforebell.ui.productlist
 
+import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import de.techwende.bestbeforebell.domain.model.Product
 import de.techwende.bestbeforebell.domain.service.ProductService
+import de.techwende.bestbeforebell.domain.service.cancelProductReminder
+import de.techwende.bestbeforebell.domain.service.scheduleProductReminder
+import de.techwende.bestbeforebell.util.dateToMillis
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +24,8 @@ class ProductListViewModel
     @Inject
     constructor(
         private val productService: ProductService,
-        savedStateHandle: SavedStateHandle
+        savedStateHandle: SavedStateHandle,
+        @ApplicationContext private val appContext: Context
     ) : ViewModel() {
         val products: StateFlow<List<Product>> =
             productService
@@ -62,11 +68,29 @@ class ProductListViewModel
                         quantity = quantity
                     )
 
+                cancelProductReminder(
+                    context = appContext,
+                    productName = name,
+                    bestBeforeMillis = dateToMillis(bestBefore),
+                )
+
+                scheduleProductReminder(
+                    context = appContext,
+                    productName = name,
+                    days = 7,
+                    bestBefore = bestBefore,
+                )
+
                 productService.saveProduct(product)
             }
         }
 
         fun removeProduct(product: Product) {
+            cancelProductReminder(
+                context = appContext,
+                productName = product.name,
+                bestBeforeMillis = dateToMillis(product.bestBefore),
+            )
             viewModelScope.launch {
                 productService.removeProduct(product)
             }
